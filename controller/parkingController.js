@@ -5,24 +5,39 @@ const {ParkingSlotModel} = require('../Model/CarParkingModel');
 const parkCar = async (req, res) => {
   try {
     const { carNumber } = req.body;
+
+    // Check if carNumber is provided
+    if (!carNumber) {
+      return res.status(400).json({ success: false, message: 'Car number is required.' });
+    }
+      
+    const alreadyPresent=await ParkingSlotModel.findOne({carNumber})
+    if(alreadyPresent)
+    {
+      return res.status(200).json({ success: false, message: 'Car Already Parked.' });
+    }
+    // Find an available slot
     const availableSlot = await ParkingSlotModel.findOne({ carNumber: null }).sort('slotNumber');
-   
-    
+
     if (!availableSlot) {
-     return res.status(400).json('Parking lot is full. No available slots.');
+      return res.status(400).json({ success: false, message: 'Parking lot is full. No available slots.' });
     }
 
-    const data = await ParkingSlotModel.findOneAndUpdate(
-      { _id: availableSlot._id },
-      { carNumber: carNumber },
-      { new: true }
-    );
+    // Assign the car to the available slot
+    availableSlot.carNumber = carNumber;
+    await availableSlot.save();
 
-    res.json({ success: true, message: data });
+    res.json({ success: true, message: 'Car parked successfully', slot: availableSlot });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    // Handle validation error for carNumber
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+
+    res.status(500).json({ success: false, message: 'Server error.' });
   }
 };
+
 
 //======================Unpark the slot================================
 
@@ -33,13 +48,13 @@ const unparkCar = async (req, res) => {
     const parkingSlot = await ParkingSlotModel.findOne({ slotNumber });
 
     if (!parkingSlot) {
-      res.status(400).json(`Slot ${slotNumber} is invalid.`);
+      return res.status(400).json(`Slot ${slotNumber} is invalid.`);
       
     //  throw new Error(`Slot ${slotNumber} is invalid.`);
     }
 
     if (!parkingSlot.carNumber) {
-      res.status(400).json(`Slot ${slotNumber} is already empty.`);
+     return  res.status(400).json(`Slot ${slotNumber} is already empty.`);
       //throw new Error(`Slot ${slotNumber} is already empty.`);
     }
 
@@ -49,7 +64,7 @@ const unparkCar = async (req, res) => {
       { new: true }
     );
 
-    res.json({ success: true, message: result });
+    res.json({ success: true, message: data });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
@@ -57,8 +72,7 @@ const unparkCar = async (req, res) => {
 
 
 //======================Get route================================
-
-
+   
 
 const getCarSlotInformation = async (req, res) => {
   try {
