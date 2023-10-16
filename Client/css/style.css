@@ -1,0 +1,42 @@
+/*
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  #parkCarForm, #unparkCarForm, #getInfoForm {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 10px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    padding: 10px 20px;
+  }
+  
+  #result {
+    border: 1px solid #ccc;
+    padding: 20px;
+  }
+  */
+
+  nav{
+    background-color: aquamarine;
+    text-align: center;
+    font-size: 40px;
+  }

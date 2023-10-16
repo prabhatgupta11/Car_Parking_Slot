@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            background-image: url('https://vyrox.com/images/parking1.jpg');
+            background-size: cover;
+            /* Adjust as needed to cover the container */
+            background-repeat: no-repeat;
+            /* Prevent image from repeating */
+        }
+
+        #container {
+            display: flex;
+            margin: auto;
+
+            width: 90%;
+            justify-content: space-between;
+            padding-top: 150px;
+
+        }
+
+        .card-div {
+            
+            width: 90%;
+            background-color: rgb(183, 180, 33);
+            text-align: center;
+            padding-bottom: 30px;
+            border: solid  snow;
+            height: 150px;
+        }
+
+        nav {
+            text-align: center;
+            font-size: 40px;
+            color: aqua;
+            width: 100%;
+            padding: 15px;
+            position: fixed;
+            margin: auto;
+
+        }
+
+
+        #ParkBtn{
+          width: 100px;
+          font-size: 15px;
+          height: 30px;
+          margin-top: 30px;
+          border-radius: 10px;
+          background-color: aquamarine;
+        } 
+        #UnparkBtn {
+            width: 100px;
+          font-size: 15px;
+          height: 30px;
+          margin-top: 30px;
+          border-radius: 10px;
+          background-color: aquamarine;
+        }
+        #getInfoBtn
+        {
+            width: 100px;
+          font-size: 15px;
+          height: 30px;
+          margin-top: 30px;
+          border-radius: 10px;
+          background-color: aquamarine;
+        }
+        .inner-div{
+            align-items: important;
+          
+        }
+    </style>
+</head>
+
+<body>
+    <nav>Welcome to Parking Lot</nav>
+
+    <div id="container">
+
+
+        <div class="card-div">
+            <h1>Park Your Car</h1>
+            <div class="inner-div">
+                <label for="">Car Number</label>
+                <input id="carnumber" type="text" placeholder=" Enter Car Number" required>
+            </div>
+
+            <div>
+                <a href="/Client/AllSlot.html"><button id="ParkBtn">Park</button></a>
+            </div>
+
+
+        </div>
+        <div class="card-div">
+            <h1>Upark Your Car</h1>
+            <div  class="inner-div">
+                <div>
+                    <label for="">Slot Number</label>
+                    <input id="slotnumber" type="text" placeholder=" Enter Slot Number" required>
+                </div>
+                
+            </div>
+            <div>
+             <button id="UnparkBtn">UnPark</button>
+                
+               
+            </div>
+            
+
+        </div>
+        <div class="card-div">
+            <h1>Get Info</h1>
+            <div class="inner-div">
+                <div>
+                    <label for="">Slot Number / Car Number </label>
+                    <input id="slot_carNumber" type="text" placeholder=" Enter Slot Number / Car Number">
+                </div>
+                
+            </div>
+            <div>
+                <button id="getInfoBtn">Get Info</button>
+            </div>
+
+          
+
+        </div>
+    </div>
+</body>
+
+<script>
+    let parkbtn = document.getElementById("ParkBtn")
+    let unparkbtn = document.getElementById("UnparkBtn")
+    let getinfobtn = document.getElementById("getInfoBtn")
+    getinfobtn.addEventListener("click",()=>{
+        alert("Under construction")
+    })
+
+    parkbtn.addEventListener("click", () => {
+    let carnumber = document.getElementById("carnumber").value;
+
+    // Check if the car number input is empty
+    if (carnumber.trim() === '') {
+        alert('Please enter a car number.');
+      
+    }
+    return; 
+ 
+        const data = {
+        carNumber: carnumber
+    };
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+
+    fetch('http://localhost:8001/parking/park', options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert("Successfully parked");
+            console.log('Successfully parked:', data);
+            window.location.href = '/Client/AllSlot.html'
+        })
+        .catch(error => {
+            console.error('Error parking:', error);
+        });
+    
+
+   
+});
+
+unparkbtn.addEventListener("click", () => {
+    let slotnumber = document.getElementById("slotnumber").value;
+
+    // Check if the slot number input is empty
+    if (slotnumber.trim() === '') {
+        alert('Please enter a slot number.');
+        return;  // Exit the function early if input is empty
+    }
+
+    const data = {
+        slotNumber: slotnumber
+    };
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+
+    fetch('http://localhost:8001/parking/unpark', options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Successfully Unparked:', data);
+        })
+        .catch(error => {
+            console.error('Error parking:', error);
+        });
+});
+
+
+</script>
+
+</html>

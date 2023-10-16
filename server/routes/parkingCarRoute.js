@@ -10,4 +10,6 @@ router.post('/unpark', rateLimiter, parkingController.unparkCar);
 
 router.get('/info/:param', rateLimiter, parkingController.getCarSlotInformation );
 
+router.get("/allslot",rateLimiter,parkingController.getAllSlots)
+
 module.exports = router;

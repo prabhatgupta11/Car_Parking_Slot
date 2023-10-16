@@ -1,5 +1,17 @@
 const {ParkingSlotModel} = require('../Model/CarParkingModel');
 
+const getAllSlots= async(req,res)=>{
+  try{
+   const data= await ParkingSlotModel.find()
+   res.status(201).json(data)
+
+  }catch(err)
+  {
+    res.status(401).json(err.message)
+  }
+
+}
+
 //======================park the slot================================
 
 const parkCar = async (req, res) => {
@@ -103,6 +115,7 @@ const getCarSlotInformation = async (req, res) => {
 };
 
 module.exports = {
+  getAllSlots,
   parkCar,
   unparkCar,
   getCarSlotInformation,
